@@ -128,28 +128,8 @@
   
   
   <section class="py-14 md:pb-32">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-black px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-black px-8" id="news-posts">
       <!-- news 1  -->
-      <article data-aos="fade-up" class="grid bg-gray-100 text-sm md:text-base pb-5 border mb-5">
-        <div class=" overflow-hidden rounded-t">
-          <img src="https://i.ibb.co/DfcfvtYZ/IMG-20260501-WA0024.jpg" alt="publication caption" class="w-full md:h-96  object-center">
-        </div>
-        <!-- date-->
-        <div class="px-2 md:px-4">
-          <h3 class="mt-8 md:mt-18 text-gray-900 "> April 2, 2026</h3>
-          <!-- topic-->
-          <h3 class="font-bold text-base md:text-xl mt-8 md:mt-10 uppercase"> Islamic Finance and Integrity in Business and Financial Transactions </h3>
-          <!-- display-->
-          <p class="mt-8 md:mt-18 text-gray-900"> At its core, Islamic finance is not merely a system of financial rules but a framework grounded in integrity. Integrity in this context goes beyond compliance. It speaks to truthfulness in dealings, fairness in obligations and… </p>
-          <!-- display-->
-          <button type="submit" class="block bg-green-500 text-white mt-10 md:mt-18 py-2 md:py-2 px-5 md:px-10 rounded-lg hover:bg-red-500"> <a href="news1.html"> Read More</a> </button>
-        </div>
-      </article>
-      
-      
-      
-      
-      
       
       <!--article grid close tag-->
     </div>
@@ -245,7 +225,59 @@
       }
     });
   </script>
-  
+
+  <script>
+    window.onload = function() {
+      AOS.init({
+        offset: 200,
+        duration: 600,
+        easing: 'ease-in-sine',
+        delay: 200,
+        once: true
+      }, );
+      
+      fetch('https://www.googleapis.com/blogger/v3/blogs/7744757304303679629/posts?key=AIzaSyAjEyj_94p-HFjFn76t6f-sLNdugSF8LhQ&maxResults=500')
+        .then(response => response.json())
+        .then(data => {
+          const newsSection = document.getElementById('news-posts');
+          
+          if (!data.items) {
+            newsSection.innerHTML = '<p class="text-center text-red-600">No posts found.</p>';
+            return;
+          }
+          
+          const filtered = data.items.filter(item => item.labels?.includes('news'));
+          filtered.forEach(item => {
+            const src = item.content.match(/<img[^>]*src="([^"]*)"/)?.[1] || 'https://via.placeholder.com/600x400';
+            const cleanText = item.content.replace(/<[^>]+>/g, '').split(' ').slice(0, 30).join(' ') + '...';
+            const date = formatDate(item.published.split('T')[0]);
+            
+            newsSection.innerHTML += `<article data-aos="fade-up" class="grid bg-gray-100 text-sm md:text-base pb-5 border mb-5">
+        <div class=" overflow-hidden rounded-t">
+          <img src="${src}" alt="${item.title}" class="w-full h-52 md:h-80 object-center">
+        </div>
+        <!-- date-->
+        <div class="px-2 md:px-4">
+          <h3 class="mt-8 md:mt-18 text-gray-900 "> ${formatDate(item.published.split('T')[0])}</h3>
+          <!-- topic-->
+          <h3 class="font-bold text-base md:text-xl mt-8 md:mt-10 uppercase"> ${item.title} </h3>
+          <!-- display-->
+          <p class="mt-8 md:mt-18 text-gray-900"> ${item.content.replace(/<[^>]+>/g, '').split(' ').slice(0, 30).join(' ')} ... </p>
+          <!-- display-->
+          <button type="submit" class="block bg-green-500 text-white mt-10 md:mt-18 py-2 md:py-2 px-5 md:px-10 rounded-lg hover:bg-red-500"> <a href="http://127.0.0.1:5500//single.html?id=${item.id}"> Read More</a> </button>
+        </div>
+      </article>
+        `;
+          });
+        })
+        .catch(error => console.error('Error fetching News posts:', error));
+    };
+    
+    function formatDate(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString('en-US', options);
+    }
+  </script>
 </body>
 
 </html>
