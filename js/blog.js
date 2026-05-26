@@ -1,6 +1,6 @@
 window.onload = function () {
-    const apiKey = 'AIzaSyAjEyj_94p-HFjFn76t6f-sLNdugSF8LhQ';
-    const blogId = '7744757304303679629';
+    const apiKey = 'AIzaSyBCikPYjNOT3T1Kw68WqLkC2sNnpClYy1o';
+    const blogId = '1089556318359039214';
     const baseUrl = `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts?key=${apiKey}`;
   
     fetch(baseUrl)
@@ -9,12 +9,13 @@ window.onload = function () {
         if (!data.items) {
           console.error('No items found in data');
           return;
+          console.log('Fetched data:', data); // Debug log to check the structure of the fetched data
         }
   
         const sections = {
           'All': document.getElementById('populate-All'),
-          'News': document.getElementById('populate-Recent'),
-          'Legalbit': document.getElementById('populate-Publications'),
+          'Recent': document.getElementById('populate-Recent'),
+          'Publications': document.getElementById('populate-Publications'),
         };
   
         Object.keys(sections).forEach(label => {
@@ -85,7 +86,7 @@ try {
           <!-- display-->
           <p class="mt-8 md:mt-18 text-gray-900"> ${item.content.replace(/<[^>]+>/g, '').split(' ').slice(0, 30).join(' ')} ... </p>
           <!-- display-->
-          <button type="submit" class="block bg-green-500 text-white mt-10 md:mt-18 py-2 md:py-2 px-5 md:px-10 rounded-lg hover:bg-red-500"> <a href="http://127.0.0.1:5500//single.html?id=${item.id}"> Read More</a> </button>
+          <button type="submit" class="block bg-green-500 text-white mt-10 md:mt-18 py-2 md:py-2 px-5 md:px-10 rounded-lg hover:bg-red-500"> <a href="https://ifelnetwork.com.ng/single.html?id=${item.id}"> Read More</a> </button>
         </div>
       </article>
     `;
