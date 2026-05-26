@@ -9,7 +9,6 @@ window.onload = function () {
         if (!data.items) {
           console.error('No items found in data');
           return;
-          console.log('Fetched data:', data); // Debug log to check the structure of the fetched data
         }
   
         const sections = {
