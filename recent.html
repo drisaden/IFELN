@@ -128,7 +128,7 @@
   
   
   <section class="py-14 md:pb-32">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-black px-8" id="news-posts">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-black px-8" id="recent-posts">
       <!-- news 1  -->
       
       <!--article grid close tag-->
@@ -236,23 +236,23 @@
         once: true
       }, );
       
-      fetch('https://www.googleapis.com/blogger/v3/blogs/7744757304303679629/posts?key=AIzaSyAjEyj_94p-HFjFn76t6f-sLNdugSF8LhQ&maxResults=500')
+      fetch('https://www.googleapis.com/blogger/v3/blogs/1089556318359039214/posts?key=AIzaSyAjEyj_94p-HFjFn76t6f-sLNdugSF8LhQ&maxResults=500')
         .then(response => response.json())
         .then(data => {
-          const newsSection = document.getElementById('news-posts');
+          const recentSection = document.getElementById('recent-posts');
           
           if (!data.items) {
-            newsSection.innerHTML = '<p class="text-center text-red-600">No posts found.</p>';
+            recentSection.innerHTML = '<p class="text-center text-red-600">No posts found.</p>';
             return;
           }
           
-          const filtered = data.items.filter(item => item.labels?.includes('news'));
+          const filtered = data.items.filter(item => item.labels?.some(label => label.toLowerCase() === 'recent'));
           filtered.forEach(item => {
             const src = item.content.match(/<img[^>]*src="([^"]*)"/)?.[1] || 'https://via.placeholder.com/600x400';
             const cleanText = item.content.replace(/<[^>]+>/g, '').split(' ').slice(0, 30).join(' ') + '...';
             const date = formatDate(item.published.split('T')[0]);
             
-            newsSection.innerHTML += `<article data-aos="fade-up" class="grid bg-gray-100 text-sm md:text-base pb-5 border mb-5">
+            recentSection.innerHTML += `<article data-aos="fade-up" class="grid bg-gray-100 text-sm md:text-base pb-5 border mb-5">
         <div class=" overflow-hidden rounded-t">
           <img src="${src}" alt="${item.title}" class="w-full h-52 md:h-80 object-center">
         </div>
